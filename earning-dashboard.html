@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earning Dashboard | InternLearn</title>
+  <link rel="stylesheet" href="earning-dashboard.css">
+</head>
+<body>
+
+  <header>
+    <h1>InternVerse</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <!-- ✅ Added onclicks for delayed redirect -->
+        <li><a href="ai-resume-builder-v2.html" onclick="redirectWithDelay(event, 'ai-resume-builder-v2.html')">Ai Resume Builder</a></li>
+        <li><a href="dummy-interview.html" onclick="redirectWithDelay(event, 'dummy-interview.html')">Dummy Interviews</a></li>
+        <li><a href="hackathon.html" onclick="redirectWithDelay(event, 'hackathon.html')">Hackathon</a></li>
+        <li><a href="internship-portal.html">Internships</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="dashboard">
+    <h1>💰 Earning Dashboard</h1>
+
+    <div class="stats">
+      <div class="card">
+        <h3>Total XP</h3>
+        <p id="totalXP">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Coins (₹)</h3>
+        <p id="coins">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Badges</h3>
+        <p id="badge">Rookie 🥉</p>
+      </div>
+    </div>
+
+    <div class="redeem-section">
+      <h2>🎁 Redeem Your Coins</h2>
+      <button class="redeem-btn" id="redeemBtn">Redeem ₹10 (1000 XP)</button>
+    </div>
+
+    <div class="history">
+      <h3>🧾 Redeem History</h3>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- Firebase + Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc, collection, addDoc, getDocs } 
+      from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_MSG_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const userEmail = localStorage.getItem("userEmail") || "guest@example.com";
+    const xpEl = document.getElementById("totalXP");
+    const coinEl = document.getElementById("coins");
+    const badgeEl = document.getElementById("badge");
+    const historyEl = document.getElementById("historyList");
+
+    async function loadEarnings() {
+      const userRef = doc(db, "leaderboard", userEmail);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const xp = userData.xp || 0;
+        xpEl.innerText = xp;
+        coinEl.innerText = (xp / 100).toFixed(2); // 100 XP = ₹1
+
+        if (xp < 1000) badgeEl.innerText = "Rookie 🥉";
+        else if (xp < 5000) badgeEl.innerText = "Pro 🥈";
+        else badgeEl.innerText = "Legend 🥇";
+      }
+
+      // Redeem history
+      const historyRef = collection(db, "redeemHistory");
+      const historySnap = await getDocs(historyRef);
+      historyEl.innerHTML = "";
+      historySnap.forEach(doc => {
+        const item = doc.data();
+        if (item.email === userEmail) {
+          historyEl.innerHTML += `
+            <div class="history-item">
+              <span>${item.date}</span>
+              <span>₹${item.amount}</span>
+            </div>
+          `;
+        }
+      });
+    }
+
+    document.getElementById("redeemBtn").addEventListener("click", async () => {
+      const userRef = doc(db, "leaderboard", userEmail);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const currentXP = userData.xp || 0;
+
+        if (currentXP >= 1000) {
+          const newXP = currentXP - 1000;
+          await updateDoc(userRef, { xp: newXP });
+
+          const redeemRef = collection(db, "redeemHistory");
+          await addDoc(redeemRef, {
+            email: userEmail,
+            amount: 10,
+            date: new Date().toLocaleString()
+          });
+
+          alert("🎉 Redeem successful! ₹10 credited.");
+          loadEarnings();
+        } else {
+          alert("❌ Not enough XP to redeem ₹10!");
+        }
+      }
+    });
+
+    loadEarnings();
+  </script>
+</body>
+</html>

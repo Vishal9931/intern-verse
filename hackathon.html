@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hackathon Hub | InternLearn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="hackathon.css">
+</head>
+<body>
+
+  <header>
+    <h1>🚀 Hackathon Hub</h1>
+    <button onclick="window.location.href='dashboard.html'">Back</button>
+  </header>
+
+  <div class="container" id="hackathonContainer">
+    <!-- Hackathon Cards will appear here -->
+  </div>
+
+  <!-- Registration Popup -->
+  <div class="popup" id="registerPopup">
+    <div class="popup-content">
+      <h2>Register for Hackathon</h2>
+      <input type="text" id="name" placeholder="Enter your name" />
+      <input type="email" id="email" placeholder="Enter your email" />
+      <button class="submit-btn" onclick="submitRegistration()">Submit</button>
+      <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const hackathons = [
+      {
+        title: "AI Innovation Challenge",
+        desc: "Build an AI project that solves real-world problems using ML, NLP, or Computer Vision.",
+        status: "ongoing",
+        date: "Oct 25–30, 2025"
+      },
+      {
+        title: "Web3 Hackfest",
+        desc: "Create decentralized applications and smart contracts that redefine user ownership.",
+        status: "upcoming",
+        date: "Nov 10–15, 2025"
+      },
+      {
+        title: "GreenTech Hackathon",
+        desc: "Innovate for sustainability! Design solutions for energy conservation and waste reduction.",
+        status: "ended",
+        date: "Sept 1–5, 2025"
+      }
+    ];
+
+    const container = document.getElementById("hackathonContainer");
+    const popup = document.getElementById("registerPopup");
+
+    // Load Hackathons
+    hackathons.forEach(h => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <span class="status ${h.status}">${h.status.toUpperCase()}</span>
+        <h2>${h.title}</h2>
+        <p>${h.desc}</p>
+        <div class="details">📅 ${h.date}</div>
+        ${h.status !== "ended" ? `<button class="join-btn" onclick="openPopup('${h.title}')">Join Now</button>` : `<button class="join-btn" disabled>Closed</button>`}
+      `;
+      container.appendChild(card);
+    });
+
+    let currentHackathon = "";
+    function openPopup(title) {
+      currentHackathon = title;
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+
+    function submitRegistration() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      if (!name || !email) {
+        alert("Please fill all details!");
+        return;
+      }
+      alert(`✅ ${name}, you have successfully registered for ${currentHackathon}!`);
+      closePopup();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #000000;
+      color: #fff;
+    }
+
+    header {
+      background: #111111;
+      color: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 22px;
+      color: #00ff00;
+    }
+
+    header button {
+      background: #ff6600;
+      color: #000000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #111111;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .user-summary {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .user-summary h2 {
+      margin: 10px 0;
+      color: #00ff00;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: #222222;
+      padding: 20px;
+      border-radius: 12px;
+      width: 160px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .stat-box h3 {
+      margin: 0;
+      font-size: 24px;
+      color: #ff6600;
+    }
+
+    .stat-box p {
+      margin: 5px 0 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .leaderboard {
+      margin-top: 40px;
+    }
+
+    .leaderboard h2 {
+      text-align: center;
+      color: #00ff00;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background: #ff6600;
+      color: #000000;
+    }
+
+    tr:hover {
+      background: #222222;
+    }
+
+    .gold {
+      color: #ffb300;
+      font-weight: 700;
+    }
+
+    .silver {
+      color: #bdbdbd;
+      font-weight: 700;
+    }
+
+    .bronze {
+      color: #cd7f32;
+      font-weight: 700;
+    }
+
+    .reward-section {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .reward-section button {
+      background: #ff6600;
+      color: #000000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #ff6600;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }

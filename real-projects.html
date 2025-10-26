@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Real Company Projects | InternLearn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="real-projects.css">
+</head>
+<body>
+
+  <header>
+    <h1>🏢 Real Company Projects</h1>
+    <button onclick="window.location.href='dashboard.html'">Back</button>
+  </header>
+
+  <div class="container" id="projectContainer"></div>
+
+  <!-- Popup -->
+  <div class="popup" id="applyPopup">
+    <div class="popup-content">
+      <h2>Apply for Project</h2>
+      <input type="text" id="name" placeholder="Your Name" />
+      <input type="email" id="email" placeholder="Your Email" />
+      <textarea id="proposal" placeholder="Write a short proposal..."></textarea>
+      <button class="submit-btn" onclick="submitApplication()">Submit</button>
+      <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const projects = [
+      {
+        company: "TechNova Solutions",
+        title: "AI Chatbot for Customer Support",
+        desc: "Build a real-time AI chatbot using NLP models to assist users on the company website.",
+        deadline: "Nov 30, 2025",
+        tags: ["AI", "NLP", "Chatbot"]
+      },
+      {
+        company: "EcoPower Pvt. Ltd.",
+        title: "IoT Energy Monitoring Dashboard",
+        desc: "Develop a responsive dashboard that visualizes IoT-based energy usage data for industries.",
+        deadline: "Dec 10, 2025",
+        tags: ["IoT", "Web Dashboard", "Data Visualization"]
+      },
+      {
+        company: "FinEdge Analytics",
+        title: "Stock Prediction Model",
+        desc: "Create an ML model that predicts stock trends and displays insights on a web interface.",
+        deadline: "Dec 25, 2025",
+        tags: ["Machine Learning", "Finance", "Python"]
+      }
+    ];
+
+    const container = document.getElementById("projectContainer");
+    const popup = document.getElementById("applyPopup");
+    let selectedProject = "";
+
+    // Render Project Cards
+    projects.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="company">${p.company}</div>
+        <div class="title">${p.title}</div>
+        <div class="desc">${p.desc}</div>
+        <div class="details">🗓 Deadline: ${p.deadline}</div>
+        <div>${p.tags.map(tag => `<span class='tag'>${tag}</span>`).join('')}</div>
+        <button class="apply-btn" onclick="openPopup('${p.title}')">Apply Now</button>
+      `;
+      container.appendChild(card);
+    });
+
+    function openPopup(title) {
+      selectedProject = title;
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+
+    function submitApplication() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const proposal = document.getElementById("proposal").value;
+
+      if (!name || !email || !proposal) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      alert(`✅ ${name}, your proposal for "${selectedProject}" has been submitted successfully!`);
+      closePopup();
+    }
+  </script>
+</body>
+</html>

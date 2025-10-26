@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InternVerse | Learn & Earn Platform</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ===============================
+      NAVBAR
+  =============================== -->
+  <header>
+    <h1>InternVerse</h1>
+    <nav>
+      <ul>
+        <li><a href="homePage.html">Home</a></li>
+        <!-- ✅ Added onclicks for delayed redirect -->
+        <li><a href="learning-page.html" onclick="redirectWithDelay(event, 'learning-page.html')">Learning</a></li>
+        <li><a href="earning-dashboard.html" onclick="redirectWithDelay(event, 'earning-dashboard.html')">Earning</a></li>
+        <li><a href="learningDashboard.html" onclick="redirectWithDelay(event, 'learningDashboard.html')">Dashboard</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===============================
+      HERO SECTION
+  =============================== -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Learn Skills. Earn Opportunities.</h2>
+      <p>InternVerse is a platform where you learn with interactive videos, take quizzes, join challenges, and apply for real internships and jobs — all in one place.</p>
+      <div class="hero-buttons">
+        <button class="btn primary" onclick="navigateTo('learning-page')">Start Learning</button>
+        <button class="btn secondary" onclick="navigateTo('earning-dashboard')">Find Internship</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://cdn.pixabay.com/photo/2017/08/06/22/01/student-2596616_1280.jpg" alt="Learning Illustration">
+    </div>
+  </section>
+
+  <!-- ===============================
+      INFO SECTION
+  =============================== -->
+  <section class="info-section">
+    <div class="info-card">
+      <h3>🎓 Learn & Grow</h3>
+      <p>Watch curated video lessons, take interactive quizzes, and earn rewards as you progress. Master skills through practical challenges and leaderboard rankings.</p>
+    </div>
+    <div class="info-card">
+      <h3>💼 Apply & Earn</h3>
+      <p>Build your AI-generated resume, practice mock interviews, and apply directly to internships and jobs from top verified companies.</p>
+    </div>
+  </section>
+
+  <!-- ===============================
+      FOOTER
+  =============================== -->
+  <footer>
+    © 2025 InternVerse. All rights reserved.
+  </footer>
+  
+  <!-- ===============================
+      JAVASCRIPT
+  =============================== -->
+  <script>
+  function navigateTo(section) {
+    if (section === 'learning') {
+      window.location.href = 'learning.html';
+    } else if (section === 'earning') {
+      window.location.href = 'earning.html';
+    }
+
+    // ✅ Added delayed redirect for existing buttons too
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000); // 20000 ms = 20 seconds
+  }
+
+  // ✅ New function for navbar links
+  function redirectWithDelay(event, target) {
+    event.preventDefault(); // stop default link behavior
+    window.location.href = target;
+
+    // after 20s, go to login page
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000);
+  }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Resume Builder v2 | InternLearn</title>
+
+  <link rel="stylesheet" href="ai-resume-builder-v2.css">
+</head>
+<body>
+<!-- 
+  <header>
+    <h1>InternVerse</h1>
+    <nav>
+      <ul>
+        <li><a href="homePage.html">Home</a></li>
+        ✅ Added onclicks for delayed redirect
+        <li><a href="learning-page.html" onclick="redirectWithDelay(event, 'learning-page.html')">Learning</a></li>
+        <li><a href="earning-dashboard.html" onclick="redirectWithDelay(event, 'earning-dashboard.html')">Earning</a></li>
+        <li><a href="learningDashboard.html" onclick="redirectWithDelay(event, 'learningDashboard.html')">Dashboard</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header> -->
+
+  <h1>🤖 AI Resume Builder (v2)</h1>
+
+  <div class="container">
+    <!-- Form Section -->
+    <div class="form-section">
+      <h2>Fill Your Details</h2>
+
+      <input id="name" placeholder="Full Name" />
+      <input id="email" placeholder="Email" />
+      <input id="phone" placeholder="Phone" />
+      <textarea id="education" rows="2" placeholder="Education"></textarea>
+      <textarea id="skills" rows="2" placeholder="Skills (comma separated)"></textarea>
+      <textarea id="experience" rows="2" placeholder="Experience"></textarea>
+      <textarea id="achievements" rows="2" placeholder="Achievements"></textarea>
+
+      <div class="template-selector">
+        <button class="template-btn active" data-template="modern">Modern</button>
+        <button class="template-btn" data-template="minimal">Minimal</button>
+        <button class="template-btn" data-template="elegant">Elegant</button>
+      </div>
+
+      <button id="generate">✨ Generate Resume</button>
+      <button id="download">📄 Download PDF</button>
+    </div>
+
+    <!-- Preview Section -->
+    <div class="preview-section">
+      <div id="resumePreview" class="preview-card">
+        <div class="resume-header">
+          <h2 id="resName">Your Name</h2>
+          <p id="resContact">email@example.com | +91 XXXXX XXXXX</p>
+        </div>
+        <p id="resSummary" class="ai-summary">Your AI-generated summary will appear here...</p>
+        <h3>🎓 Education</h3>
+        <p id="resEducation">Your education details...</p>
+        <h3>💼 Experience</h3>
+        <p id="resExperience">Your work experience...</p>
+        <h3>🛠 Skills</h3>
+        <p id="resSkills">Your skills...</p>
+        <h3>🏆 Achievements</h3>
+        <p id="resAchievements">Your achievements...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    const genBtn = document.getElementById('generate');
+    const downloadBtn = document.getElementById('download');
+    const templateBtns = document.querySelectorAll('.template-btn');
+    let selectedTemplate = 'modern';
+
+    // Template selection
+    templateBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        templateBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedTemplate = btn.dataset.template;
+      });
+    });
+
+    // Generate Resume with AI Summary
+    genBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value || 'Student Name';
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const education = document.getElementById('education').value;
+      const skills = document.getElementById('skills').value;
+      const experience = document.getElementById('experience').value;
+      const achievements = document.getElementById('achievements').value;
+
+      const aiSummary = generateAISummary(name, skills, experience);
+
+      document.getElementById('resName').textContent = name;
+      document.getElementById('resContact').textContent = `${email} | ${phone}`;
+      document.getElementById('resSummary').textContent = aiSummary;
+      document.getElementById('resEducation').textContent = education;
+      document.getElementById('resSkills').textContent = skills;
+      document.getElementById('resExperience').textContent = experience;
+      document.getElementById('resAchievements').textContent = achievements;
+
+      applyTemplateStyle(selectedTemplate);
+    });
+
+    // Simple AI summary logic (mock, can connect to OpenAI later)
+    function generateAISummary(name, skills, experience) {
+      const mainSkill = skills.split(',')[0] || 'multiple domains';
+      const firstExp = experience.split(',')[0] || 'various internships';
+      return `${name} is a dedicated learner skilled in ${mainSkill}. Experienced in ${firstExp}, with a strong focus on innovation, teamwork, and problem-solving.`;
+    }
+
+    // Template Styling
+    function applyTemplateStyle(template) {
+      const preview = document.getElementById('resumePreview');
+      if (template === 'modern') {
+        preview.style.background = 'white';
+        preview.style.color = '#111';
+      } else if (template === 'minimal') {
+        preview.style.background = '#f9f9f9';
+        preview.style.color = '#333';
+      } else {
+        preview.style.background = 'linear-gradient(135deg, #e0f7fa, #fff)';
+        preview.style.color = '#222';
+      }
+    }
+
+    // PDF Download
+    downloadBtn.addEventListener('click', () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.html(document.getElementById('resumePreview'), {
+        callback: pdf => pdf.save('AI_Resume.pdf'),
+        x: 10, y: 10, width: 180
+      });
+    });
+  </script>
+
+</body>
+</html>

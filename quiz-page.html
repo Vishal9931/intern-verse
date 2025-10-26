@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Quiz | InternLearn</title>
+  <link rel="stylesheet" href="quiz-page.css">
+</head>
+<body>
+
+  <header>
+    <h1>📚 Final Quiz — HTML Basics</h1>
+    <button onclick="window.location.href='learning-dashboard.html'">⬅ Dashboard</button>
+  </header>
+
+  <div class="quiz-container">
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+
+    <div class="question-box" id="questionBox">
+      <!-- Questions appear dynamically -->
+    </div>
+
+    <div class="quiz-footer">
+      <button id="nextBtn" onclick="nextQuestion()" disabled>Next ➡</button>
+    </div>
+
+    <div class="result-box" id="resultBox">
+      <h2>🎉 Quiz Completed!</h2>
+      <p id="scoreText"></p>
+      <button onclick="retryQuiz()">🔁 Retry</button>
+      <button onclick="window.location.href='reward-page.html'">🏅 View Rewards</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "1️⃣ What does HTML stand for?",
+        options: [
+          "Hyper Text Markup Language",
+          "High Tool Markup Language",
+          "Hyperlink Mark Language"
+        ],
+        correct: 0
+      },
+      {
+        question: "2️⃣ Which tag is used for the largest heading?",
+        options: ["<heading>", "<h1>", "<h6>"],
+        correct: 1
+      },
+      {
+        question: "3️⃣ What is the correct HTML for inserting a line break?",
+        options: ["<break>", "<lb>", "<br>"],
+        correct: 2
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const questionBox = document.getElementById("questionBox");
+    const progress = document.getElementById("progress");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultBox = document.getElementById("resultBox");
+    const scoreText = document.getElementById("scoreText");
+
+    function loadQuestion() {
+      const q = quizData[current];
+      progress.style.width = `${((current) / quizData.length) * 100}%`;
+      questionBox.innerHTML = `
+        <h2>${q.question}</h2>
+        ${q.options.map((opt, i) => `
+          <div class="option" onclick="checkAnswer(this, ${i === q.correct})">${opt}</div>
+        `).join('')}
+      `;
+    }
+
+    function checkAnswer(element, correct) {
+      const options = document.querySelectorAll(".option");
+      options.forEach(o => o.style.pointerEvents = "none");
+
+      if (correct) {
+        element.classList.add("correct");
+        score++;
+      } else {
+        element.classList.add("wrong");
+      }
+
+      nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+      nextBtn.disabled = true;
+      current++;
+
+      if (current < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      progress.style.width = "100%";
+      questionBox.style.display = "none";
+      nextBtn.style.display = "none";
+      resultBox.style.display = "block";
+      scoreText.innerText = `You scored ${score} / ${quizData.length}`;
+    }
+
+    function retryQuiz() {
+      current = 0;
+      score = 0;
+      resultBox.style.display = "none";
+      questionBox.style.display = "block";
+      nextBtn.style.display = "inline-block";
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>

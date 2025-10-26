@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard & Rewards | InternLearn</title>
+<link rel="stylesheet" href="learderboard.css">
+</head>
+<body>
+
+  <header>
+    <h1>🏆 Leaderboard & Rewards</h1>
+    <button onclick="window.location.href='learningDashboard.html'">⬅ Dashboard</button>
+  </header>
+
+  <div class="container">
+    <!-- User Summary -->
+    <div class="user-summary">
+      <div class="badge">🌟</div>
+      <h2>Aditya Kumar</h2>
+      <div class="stats">
+        <div class="stat-box">
+          <h3 id="userScore">120</h3>
+          <p>Total Points</p>
+        </div>
+        <div class="stat-box">
+          <h3>#3</h3>
+          <p>Rank</p>
+        </div>
+        <div class="stat-box">
+          <h3>5</h3>
+          <p>Courses Completed</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard">
+      <h2>Top Performers 💪</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Points</th>
+            <th>Badge</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardData"></tbody>
+      </table>
+    </div>
+
+    <!-- Reward Section -->
+    <div class="reward-section">
+      <h3>🎓 Congratulations! You’ve unlocked a new reward badge.</h3>
+      <button onclick="downloadCertificate()">📄 Download Certificate</button>
+    </div>
+  </div>
+
+  <script>
+    const leaderboard = [
+      { name: "Aarav Sharma", points: 180 },
+      { name: "Isha Patel", points: 150 },
+      { name: "Aditya Kumar", points: 120 },
+      { name: "Riya Verma", points: 110 },
+      { name: "Kunal Singh", points: 90 }
+    ];
+
+    const tbody = document.getElementById("leaderboardData");
+
+    leaderboard.forEach((user, index) => {
+      let badge = "";
+      if (index === 0) badge = "🥇";
+      else if (index === 1) badge = "🥈";
+      else if (index === 2) badge = "🥉";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${user.name}</td>
+        <td>${user.points}</td>
+        <td>${badge}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    function downloadCertificate() {
+      alert("🎉 Your certificate is being generated...");
+      // Future: generate and download PDF
+    }
+  </script>
+
+</body>
+</html>

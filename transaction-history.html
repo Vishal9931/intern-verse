@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Transaction History | InternLearn</title>
+
+ <link rel="stylesheet" href="transication-history.css">
+</head>
+<body>
+
+  <h1>💳 Transaction History</h1>
+  <div class="container" id="history"></div>
+  <a href="earning-dashboard.html" class="back-btn">⬅ Back to Earning Dashboard</a>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } 
+      from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // 🔥 Firebase Config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_MSG_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const userEmail = localStorage.getItem("userEmail") || "guest@example.com";
+
+    async function loadHistory() {
+      const historyDiv = document.getElementById("history");
+      const querySnapshot = await getDocs(collection(db, "withdrawRequests"));
+      let found = false;
+
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.email === userEmail) {
+          found = true;
+          const statusClass = data.status.toLowerCase();
+          historyDiv.innerHTML += `
+            <div class="card">
+              <div class="top">
+                <div class="amount">₹${data.amount}</div>
+                <div class="status ${statusClass}">${data.status}</div>
+              </div>
+              <div class="details">
+                Method: ${data.method.toUpperCase()}<br>
+                Account: ${data.upi}<br>
+                Requested: ${data.date || "N/A"}<br>
+                ${data.paidAt ? `Paid: ${data.paidAt}` : ""}
+              </div>
+              ${data.txnId ? `<div class="txn">TXN ID: ${data.txnId}</div>` : ""}
+            </div>
+          `;
+        }
+      });
+
+      if (!found) {
+        historyDiv.innerHTML = `<p style="text-align:center;color:#ccc;">No transactions yet 🚀</p>`;
+      }
+    }
+
+    loadHistory();
+  </script>
+
+</body>
+</html>

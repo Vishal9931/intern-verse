@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InternVerse | Learning Dashboard</title>
+  <link rel="stylesheet" href="learningDashboaed.css">
+</head>
+<body>
+
+  <!-- ===============================
+       SIDEBAR
+  =============================== -->
+  <div class="sidebar">
+    <div>
+      <h2>InternVerse</h2>
+      <ul class="menu">
+        <li><a href="learningDashboard.html" class="active">📚 My Courses</a></li>
+        <li><a href="leaderboard.html">🏆 Leaderboard</a></li>
+        <li><a href="challenge-mode.html">⚙️ Challenge Mode</a></li>
+        <li><a href="ceartificatePage.html">🎓 Certificates</a></li>
+        <li><a href="reward.html">🎮 Rewards</a></li>
+      </ul>
+    </div>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+  </div>
+
+  <!-- ===============================
+       MAIN CONTENT
+  =============================== -->
+  <div class="main-content">
+    <div class="header">
+      <h1>Welcome back, Aditya 👋</h1>
+      <div class="user">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="User">
+        <span>Student</span>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:20px;">Your Active Courses</h2>
+
+    <div class="courses">
+      <div class="course-card">
+        <h3>Web Development</h3>
+        <p>Learn HTML, CSS, JS, and build your own portfolio website.</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;"></div></div>
+        <div class="course-footer">
+          <span>70% Complete</span>
+          <button class="start-btn" onclick="startCourse('webdev')">Continue</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <h3>Python Programming</h3>
+        <p>Start coding with Python and solve real-world problems.</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:45%;"></div></div>
+        <div class="course-footer">
+          <span>45% Complete</span>
+          <button class="start-btn" onclick="startCourse('python')">Continue</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <h3>Data Science Basics</h3>
+        <p>Understand data visualization, pandas, and machine learning fundamentals.</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+        <div class="course-footer">
+          <span>25% Complete</span>
+          <button class="start-btn" onclick="startCourse('datascience')">Continue</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <h3>UI/UX Design</h3>
+        <p>Learn how to design beautiful, user-friendly interfaces.</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:90%;"></div></div>
+        <div class="course-footer">
+          <span>90% Complete</span>
+          <button class="start-btn" onclick="startCourse('uiux')">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===============================
+       JAVASCRIPT
+  =============================== -->
+  <script>
+    function startCourse(course) {
+      alert("Opening " + course + " course...");
+      // Example navigation
+      window.location.href = "course-" + course + ".html";
+    }
+
+    function logout() {
+      const confirmLogout = confirm("Are you sure you want to logout?");
+      if (confirmLogout) {
+        window.location.href = "login.html";
+      }
+    }
+  </script>
+
+</body>
+</html>

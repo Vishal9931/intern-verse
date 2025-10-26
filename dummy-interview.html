@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Dummy Interview | InternLearn</title>
+  <link rel="stylesheet" href="dummy-interview.css">
+</head>
+<body>
+
+  <h1>🧠 AI Dummy Interview</h1>
+
+  <div class="interview-box">
+    <div class="question" id="question">Loading first question...</div>
+
+    <textarea id="answer" placeholder="Type your answer here..."></textarea>
+
+    <div>
+      <button id="submitBtn">Submit Answer</button>
+      <button id="nextBtn" class="next-btn">Next Question ➡️</button>
+    </div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <h3>💬 AI Feedback</h3>
+      <p id="feedbackText">Your feedback will appear here...</p>
+
+      <div class="score">
+        <div>
+          <strong>Confidence</strong>
+          <span id="confidenceScore">0%</span>
+        </div>
+        <div>
+          <strong>Clarity</strong>
+          <span id="clarityScore">0%</span>
+        </div>
+        <div>
+          <strong>Accuracy</strong>
+          <span id="accuracyScore">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      "Tell me about yourself.",
+      "What are your strengths and weaknesses?",
+      "Explain any project you’ve worked on recently.",
+      "Where do you see yourself in 5 years?",
+      "How do you handle stress or tight deadlines?",
+      "What makes you suitable for this internship?",
+      "Explain OOPs concept in simple terms.",
+      "What is the difference between HTML and HTML5?",
+      "How does CSS Flexbox work?",
+      "Describe your experience working in a team."
+    ];
+
+    let currentQuestion = 0;
+    const questionEl = document.getElementById('question');
+    const feedbackBox = document.getElementById('feedbackBox');
+    const feedbackText = document.getElementById('feedbackText');
+    const confidenceScore = document.getElementById('confidenceScore');
+    const clarityScore = document.getElementById('clarityScore');
+    const accuracyScore = document.getElementById('accuracyScore');
+
+    questionEl.textContent = questions[currentQuestion];
+
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      const ans = document.getElementById('answer').value.trim();
+      if (!ans) {
+        alert("Please write your answer before submitting!");
+        return;
+      }
+
+      feedbackBox.style.display = "block";
+
+      // Simple AI Feedback Simulation
+      const words = ans.split(' ').length;
+      const confidence = Math.min(100, words * 2 + Math.random() * 10);
+      const clarity = Math.min(100, 60 + Math.random() * 40);
+      const accuracy = Math.min(100, 50 + Math.random() * 50);
+
+      feedbackText.textContent = generateFeedback(ans);
+      confidenceScore.textContent = `${confidence.toFixed(0)}%`;
+      clarityScore.textContent = `${clarity.toFixed(0)}%`;
+      accuracyScore.textContent = `${accuracy.toFixed(0)}%`;
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      currentQuestion++;
+      if (currentQuestion >= questions.length) {
+        alert("Interview Complete! Great job 🎉");
+        currentQuestion = 0;
+      }
+      questionEl.textContent = questions[currentQuestion];
+      document.getElementById('answer').value = "";
+      feedbackBox.style.display = "none";
+    });
+
+    // Simulated feedback logic
+    function generateFeedback(answer) {
+      const len = answer.split(' ').length;
+      if (len < 15) return "Try giving more detailed answers to show depth and understanding.";
+      if (len < 30) return "Good answer! You gave a clear overview, try adding examples or experiences.";
+      return "Excellent! Your response is well-structured and confident. Keep it up!";
+    }
+  </script>
+
+</body>
+</html>

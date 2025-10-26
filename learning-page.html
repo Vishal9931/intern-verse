@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Learning | InternLearn</title>
+ <link rel="stylesheet" href="learning-page.css">
+</head>
+<body>
+
+  <header>
+    <h1>📘 Learn: HTML Basics</h1>
+    <button onclick="window.location.href='learningDashboard.html'">⬅ Back</button>
+  </header>
+
+  <div class="content">
+    <!-- Left: Video Section -->
+    <div class="video-section">
+      <video id="courseVideo" controls>
+        <source src="sample-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <p><strong>Description:</strong> In this video, you’ll learn HTML basics — tags, structure, and attributes.</p>
+    </div>
+
+    <!-- Right: Question Section -->
+    <div class="question-section">
+      <h2>Quick Quiz 🧠</h2>
+
+      <div class="question">
+        <p><strong>1. What does HTML stand for?</strong></p>
+        <div class="option" onclick="checkAnswer(this, true)">Hyper Text Markup Language</div>
+        <div class="option" onclick="checkAnswer(this, false)">High Tool Markup Language</div>
+        <div class="option" onclick="checkAnswer(this, false)">Hyperlink Mark Language</div>
+      </div>
+
+      <div class="reward-section">
+        <button id="nextButton" onclick="nextLesson()" disabled>Next Lesson ➡</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkAnswer(element, isCorrect) {
+      const options = document.querySelectorAll('.option');
+      options.forEach(opt => opt.style.pointerEvents = 'none'); // disable clicks
+
+      if (isCorrect) {
+        element.classList.add('correct');
+        document.getElementById("nextButton").disabled = false;
+        alert("🎉 Correct! Well done.");
+      } else {
+        element.classList.add('wrong');
+        alert("❌ Wrong answer. Please rewatch the video.");
+        document.getElementById("courseVideo").currentTime = 0; // rewind
+        document.getElementById("courseVideo").play();
+      }
+    }
+
+    function nextLesson() {
+      alert("✅ Topic Completed! You earned +10 points.");
+      window.location.href = "learningDashboard.html";
+    }
+  </script>
+
+</body>
+</html>

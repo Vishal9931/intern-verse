@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup | Learn & Earn</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome to Learn & Earn</h2>
+
+    <div class="tab-buttons">
+      <button id="loginTab" class="active">Login</button>
+      <button id="signupTab">Signup</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="form active">
+      <label>Email:</label>
+      <input type="email" id="loginEmail" placeholder="Enter your email" required>
+
+      <label>Password:</label>
+      <input type="password" id="loginPassword" placeholder="Enter your password" required>
+
+      <button type="button" class="submit" onclick="login()">Login</button>
+      <p class="error" id="loginError"></p>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form id="signupForm" class="form">
+      <label>Full Name:</label>
+      <input type="text" id="signupName" placeholder="Enter your name" required>
+
+      <label>Email:</label>
+      <input type="email" id="signupEmail" placeholder="Enter your email" required>
+
+      <label>University ID:</label>
+      <input type="text" id="signupID" placeholder="Enter university ID" required>
+
+      <label>Password:</label>
+      <input type="password" id="signupPassword" placeholder="Create password" required>
+
+      <label>Select Role:</label>
+      <div class="role-selection">
+        <div class="role" data-role="student">Student</div>
+        <div class="role" data-role="company">Company</div>
+        <div class="role" data-role="admin">Admin</div>
+      </div>
+
+      <!-- Title input that appears based on role selection -->
+      <div class="title-input" id="titleInputContainer" style="display: none;">
+        <label>Title/Position:</label>
+        <input type="text" id="signupTitle" placeholder="Enter your title/position">
+      </div>
+
+      <button type="button" class="submit" onclick="signup()">Signup</button>
+      <p class="error" id="signupError"></p>
+    </form>
+  </div>
+
+  <script>
+    // --- Tab switching ---
+    const loginTab = document.getElementById("loginTab");
+    const signupTab = document.getElementById("signupTab");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+
+    loginTab.addEventListener("click", () => {
+      loginTab.classList.add("active");
+      signupTab.classList.remove("active");
+      loginForm.classList.add("active");
+      signupForm.classList.remove("active");
+    });
+
+    signupTab.addEventListener("click", () => {
+      signupTab.classList.add("active");
+      loginTab.classList.remove("active");
+      signupForm.classList.add("active");
+      loginForm.classList.remove("active");
+    });
+
+    // --- Role Selection ---
+    const roles = document.querySelectorAll(".role");
+    const titleInputContainer = document.getElementById("titleInputContainer");
+    const signupTitle = document.getElementById("signupTitle");
+    let selectedRole = "";
+
+    // Role titles mapping
+    const roleTitles = {
+      'student': 'Student',
+      'company': 'Company Representative',
+      'admin': 'Administrator'
+    };
+
+    roles.forEach(role => {
+      role.addEventListener("click", () => {
+        roles.forEach(r => r.classList.remove("active"));
+        role.classList.add("active");
+        selectedRole = role.dataset.role;
+        
+        // Show title input and auto-fill based on role
+        titleInputContainer.style.display = 'block';
+        signupTitle.value = roleTitles[selectedRole] || '';
+      });
+    });
+
+    // --- Local Storage (Fake Database) ---
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // --- Signup Function ---
+    function signup() {
+      const name = document.getElementById("signupName").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const id = document.getElementById("signupID").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      const title = document.getElementById("signupTitle").value.trim() || roleTitles[selectedRole] || 'User';
+      const error = document.getElementById("signupError");
+
+      // Validation
+      if (!selectedRole) {
+        error.textContent = "⚠️ Please select a role.";
+        return;
+      }
+
+      if (users.some(u => u.email === email)) {
+        error.textContent = "⚠️ This email is already registered!";
+        return;
+      }
+
+      if (users.some(u => u.universityID === id)) {
+        error.textContent = "⚠️ This University ID is already registered!";
+        return;
+      }
+
+      if (password.length < 6) {
+        error.textContent = "⚠️ Password must be at least 6 characters!";
+        return;
+      }
+
+      // Create user object
+      const userData = {
+        name,
+        email,
+        universityID: id,
+        password,
+        role: selectedRole,
+        title: title,
+        joinDate: new Date().toISOString(),
+        isNewUser: true
+      };
+
+      // Add to users array
+      users.push(userData);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // Store current user session
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      
+      // Store individual profile data
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userTitle', title);
+      localStorage.setItem('userRole', selectedRole);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userJoinDate', userData.joinDate);
+      localStorage.setItem('userUniversityID', id);
+
+      alert("🎉 Signup successful! Welcome to Learn & Earn!");
+      
+      // Redirect to appropriate page
+      redirectAfterSignup(selectedRole);
+    }
+
+    // --- Redirect based on role ---
+    function redirectAfterSignup(role) {
+      switch(role) {
+        case 'student':
+          window.location.href = "profile.html";
+          break;
+        case 'company':
+          window.location.href = "company-dashboard.html";
+          break;
+        case 'admin':
+          window.location.href = "admin-dashboard.html";
+          break;
+        default:
+          window.location.href = "profile.html";
+      }
+    }
+
+    // --- Login Function ---
+    function login() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const error = document.getElementById("loginError");
+
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        error.textContent = "❌ Invalid email or password!";
+        return;
+      }
+
+      // Store current user session
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      
+      // Store individual profile data
+      localStorage.setItem('userName', user.name);
+      localStorage.setItem('userTitle', user.title);
+      localStorage.setItem('userRole', user.role);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userJoinDate', user.joinDate);
+      localStorage.setItem('userUniversityID', user.universityID);
+
+      alert(`✅ Welcome back ${user.name}!`);
+
+      // Redirect based on role
+      redirectAfterLogin(user.role);
+    }
+
+    // --- Redirect after login ---
+    function redirectAfterLogin(role) {
+      switch(role) {
+        case 'student':
+          window.location.href = "learning-dashboard.html";
+          break;
+        case 'company':
+          window.location.href = "company-dashboard.html";
+          break;
+        case 'admin':
+          window.location.href = "admin-dashboard.html";
+          break;
+        default:
+          window.location.href = "learning-dashboard.html";
+      }
+    }
+
+    // --- Auto-fill demo data for testing ---
+    window.addEventListener('DOMContentLoaded', function() {
+      // Check if we have any users, if not add a demo student
+      if (users.length === 0) {
+        const demoUser = {
+          name: "Demo Student",
+          email: "student@demo.com",
+          universityID: "DEMO001",
+          password: "demo123",
+          role: "student",
+          title: "Student",
+          joinDate: new Date().toISOString()
+        };
+        users.push(demoUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        
+        // Also add demo company and admin
+        const demoCompany = {
+          name: "Demo Company",
+          email: "company@demo.com",
+          universityID: "COMP001",
+          password: "demo123",
+          role: "company",
+          title: "HR Manager",
+          joinDate: new Date().toISOString()
+        };
+        users.push(demoCompany);
+        
+        const demoAdmin = {
+          name: "Demo Admin",
+          email: "admin@demo.com",
+          universityID: "ADMIN001",
+          password: "demo123",
+          role: "admin",
+          title: "System Administrator",
+          joinDate: new Date().toISOString()
+        };
+        users.push(demoAdmin);
+        
+        localStorage.setItem("users", JSON.stringify(users));
+      }
+    });
+  </script>
+</body>
+</html>
